@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 public class SongManager : MonoBehaviour
 {
   public GameManager gm;
+
+	public bool isLoaded = false;
 
 	/*
 	 * @TODO: put this into a SongInfo.cs class
@@ -17,6 +20,7 @@ public class SongManager : MonoBehaviour
   public string creator;
   public string audioFilename;
   public string audioLeadIn;
+	public float beatLength;
 
 	/*
 	 * @TODO: rework this into an array representing the actual line structure
@@ -24,6 +28,8 @@ public class SongManager : MonoBehaviour
 	public float noteSize;
 	public float noteSpeed;
 	public float noteDifficulty;
+	public float sliderMultiplier;
+	public float sliderTickRate;
 
 	string[] beatmapLines;
 
@@ -35,7 +41,9 @@ public class SongManager : MonoBehaviour
 
   public void LoadSong(string folder, string diff, string audio)
   {
-    string beatmapFolderPath = Application.dataPath + "/Resources/Songs/" + folder + "/";
+		isLoaded = false;
+
+		string beatmapFolderPath = Application.dataPath + "/Resources/Songs/" + folder + "/";
     string beatmapAudioPath = folder + "/" + audio; // without file extension. resource loader doesn't need it
     beatmapFilePath = beatmapFolderPath + diff + ".osu";
 
@@ -44,10 +52,13 @@ public class SongManager : MonoBehaviour
 
     ConvertBeatmapInfo();
 		ConvertDifficultyInfo();
-    ConvertHitObjects();
+		ConvertTimingInfo();
+		ConvertHitObjects();
 
     gm.audioManager.LoadSongAudio(beatmapAudioPath);
-  }
+
+		isLoaded = true;
+	}
 
   void LoadBeatmapIntoArray()
   {
@@ -121,6 +132,14 @@ public class SongManager : MonoBehaviour
 					noteSpeed = float.Parse(property[1]);
 					break;
 
+				case "SliderMultiplier":
+					sliderMultiplier = float.Parse(property[1]);
+					break;
+
+				case "SliderTickRate":
+					sliderTickRate = float.Parse(property[1]);
+					break;
+
 				case "OverallDifficulty":
 					noteDifficulty = float.Parse(property[1]);
 					break;
@@ -159,9 +178,29 @@ public class SongManager : MonoBehaviour
           return;
       }
     }
-  }
+	}
 
-  void ConvertHitObjects()
+	void ConvertTimingInfo()
+	{
+		int index = 0;
+
+		foreach (string line in beatmapLines)
+		{
+			if (index < indexTimingPoints)
+			{
+				index++;
+				continue;
+			}
+
+			string[] property = Regex.Split(line, ","); // get first word from current line
+
+			gm.audioManager.beatLength = float.Parse(property[1]);
+			beatLength = float.Parse(property[1]);
+			return;
+		}
+	}
+
+	void ConvertHitObjects()
   {
     int index = 0;
 
@@ -177,8 +216,54 @@ public class SongManager : MonoBehaviour
 
 			long time = long.Parse(dataPoints[2]);
 			int x = int.Parse(dataPoints[0]) * 3 / 64;
+			
+			// if hitobject == note
+			if (dataPoints[5] == "0:0:0:0:")
+			{
+				gm.noteManager.CreateNote(time, x, (int)noteSize, noteSpeed);
+				continue;
+			}
+
+			// if hitobject == holdnote (slider tick note equivalent)
+			string dataPoint = dataPoints[5];
+
+			string[] sliderPoints = Regex.Split(dataPoint, "\\|");
+
+			//sliderPoints = sliderPoints.Skip(1).ToArray(); // skip letter
+			string sliderEndPoint = sliderPoints.Last();
+
+			int sliderEndPointX = int.Parse(Regex.Split(sliderEndPoint, ":")[0]);
+
+			float pixelLength = 0f;
+
+			if (dataPoints.Length > 7)
+				pixelLength = float.Parse(dataPoints[7]);
+			
+			float sliderDuration = pixelLength / (100.0f * sliderMultiplier) * gm.audioManager.beatLength;
+			float sliderTickFrequency = beatLength / sliderTickRate;
+			int sliderTicks = Mathf.FloorToInt(sliderDuration / sliderTickFrequency);
 
 			gm.noteManager.CreateNote(time, x, (int)noteSize, noteSpeed);
+			gm.noteManager.CreateNote(time + (long)sliderDuration, x, (int)noteSize, noteSpeed - noteSpeed / 5);
+
+			 /*
+				* HOLD NOTE IMPLEMENTATION PROCESS
+				* 
+				* createHoldNote(x, time, sliderEndPointX, sliderTicks, sliderTickFrequency)
+				* 
+				* calculate their x positions (x + (sliderEndPointX - x) * currentSliderTick) and times (startNote.time + (beatLength / sliderTickRate) * currentSliderTick)
+				* @TODO: account for rounding errors and take them into consideration later
+				*/
+
+			// if hitobject == long note (slider equivalent)
+
+
+			 /*
+				* LONG NOTE IMPLEMENTATION PROCESS
+				* 
+				* createLongNote(x, time, sliderDuration)
+				* how to display long note body? what length? (> scrollspeed, sliderDuration)
+				*/
 		}
 	}
 }

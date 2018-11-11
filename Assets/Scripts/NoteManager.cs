@@ -14,6 +14,11 @@ public class NoteManager : MonoBehaviour
 	public int offsetCapacity = 10;
 
 	/*
+	 * player stats: how many perfect, great, good, bad hits and misses
+	 */
+	public int[] stats = new int[5];
+
+	/*
 	 * For Normal Gameplay
 	 * a t 1224
 	 * d t -382
@@ -32,7 +37,10 @@ public class NoteManager : MonoBehaviour
 
 	void Start()
   {
-    noteList = new List<Note>();
+		// judgement testing
+		despawnTime = -Judgement.BAD / 2;
+
+		noteList = new List<Note>();
 		offsetHistory.Capacity = offsetCapacity;
   }
 

@@ -14,6 +14,14 @@ public class Note : MonoBehaviour
   public float size = .5f;
 	public float speed = 200f;
 
+	/*
+	 * 0 = normal note
+	 * 1 = hold note
+	 * 2 = long note (?)
+	 * 3 = triller note (?)
+	 */
+	public int noteMode = 0;
+
   private Vector3 rotationPoint;
   private Vector3 endPosition;
 
@@ -40,7 +48,13 @@ public class Note : MonoBehaviour
       noteModel.SetActive(true);
 
     if (timeUntilnote < gm.noteManager.despawnTime)
-      RemoveNote();
+      MissNote();
+	}
+
+	void MissNote()
+	{
+		gm.judgementManager.GetJudgement(gm.noteManager.despawnTime * 2);
+		RemoveNote();
 	}
 
   public void Tap(long tapTime)
@@ -50,6 +64,8 @@ public class Note : MonoBehaviour
 		gm.ui.offsetText.text = offset.ToString();
 
 		gm.noteManager.offsetHistory.Insert(0, offset);
+
+		gm.judgementManager.GetJudgement(offset);
 
     RemoveNote();
   }

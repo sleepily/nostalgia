@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
 	public AudioClip clip;
 	public AudioSource source;
 
+	public float beatLength = 0f;
+
 	public long offset = 0;
 
 	void Start()
