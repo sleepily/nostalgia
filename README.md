@@ -4,7 +4,7 @@ a cross-platform clone of the arcade rhythm game ノスタルジアFORTE (nostal
 ### implemented features (technical, for nerds)
 - osu! beatmap parser: converts song info, hitobjects
 - song playback + hitobject sync
-- keyboard input __T__
+- keyboard input _T_
 
 ### currently implementing
 - judgement (how well you hit a note)
@@ -15,8 +15,8 @@ a cross-platform clone of the arcade rhythm game ノスタルジアFORTE (nostal
 - triller notes
 - song selection view
 - menu view
-- touchscreen/mouse support __T__
+- touchscreen/mouse support _T_
 - midi keyboard support
 ...and everything else
 
-points marked with __T__ are only implemented for testing purposes.
+points marked with _T_ are only implemented for testing purposes.
