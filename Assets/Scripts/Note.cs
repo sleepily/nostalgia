@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-public class Note : MonoBehaviour
+public abstract class Note : MonoBehaviour
 {
   public GameManager gm;
 
@@ -14,14 +11,6 @@ public class Note : MonoBehaviour
   public float size = .5f;
 	public float speed = 200f;
 
-	/*
-	 * 0 = normal note
-	 * 1 = hold note
-	 * 2 = long note (?)
-	 * 3 = triller note (?)
-	 */
-	public int noteMode = 0;
-
   private Vector3 rotationPoint;
   private Vector3 endPosition;
 
@@ -30,8 +19,6 @@ public class Note : MonoBehaviour
 	void Start ()
   {
     noteModel.SetActive(false);
-
-		//speed = gm.noteManager.speed;
 
     noteModel.transform.localScale = new Vector3(width, size, size);
     rotationPoint = Vector3.right * x;
@@ -65,9 +52,11 @@ public class Note : MonoBehaviour
 
 		gm.noteManager.offsetHistory.Insert(0, offset);
 
-		gm.judgementManager.GetJudgement(offset);
+		int judgement = gm.judgementManager.GetJudgement(offset);
 
-    RemoveNote();
+    // if the note is hit way too early, do not remove or count as hit
+    if (judgement != -1)
+      RemoveNote();
   }
 
   void RemoveNote()

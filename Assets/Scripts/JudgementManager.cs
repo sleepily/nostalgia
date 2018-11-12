@@ -19,30 +19,42 @@ public class JudgementManager : MonoBehaviour
 	/*
 	 * @TODO: implement long/hold note judgement
 	 */
-	public void GetJudgement(long offset)
+	public int GetJudgement(long offset)
 	{
 		int judgement = CalculateJudgement(offset);
-		string judgementString = "";
 
-		judgementString =
-			(judgement == 0) ? "PERFECT" :
-			(judgement == 1) ? "GREAT" :
-			(judgement == 2) ? "GOOD" :
-			(judgement == 3) ? "BAD" : "MISS";
+    DisplayJudgement(judgement);
+    RenderStats();
 
-		gm.ui.judgementText.text = judgementString;
-		gm.noteManager.stats[judgement] += 1;
-
-		string statsString = "";
-
-		foreach (int i in gm.noteManager.stats)
-			statsString += i + " ";
-
-		gm.ui.statsText.text = statsString;
+    return judgement;
 	}
+
+  void DisplayJudgement(int judgementIndex)
+  {
+    string judgementString = Judgement.GetJudgementString(judgementIndex);
+
+    if (judgementString != "")
+    {
+      gm.ui.judgementText.text = judgementString;
+      gm.noteManager.stats[judgementIndex] += 1;
+    }
+  }
+
+  void RenderStats()
+  {
+    string statsString = "";
+
+    foreach (int i in gm.noteManager.stats)
+      statsString += i + " ";
+
+    gm.ui.statsText.text = statsString;
+  }
 
 	int CalculateJudgement(long offset)
 	{
+    if (offset <= Judgement.MISS / 2)
+      return -1;
+
 		float abs = Mathf.Abs(offset);
 
 		if (abs <= Judgement.PERFECT / 2)

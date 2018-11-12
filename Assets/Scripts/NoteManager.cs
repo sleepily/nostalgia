@@ -8,30 +8,31 @@ public class NoteManager : MonoBehaviour
 
   public Note notePrefab;
 
+  // @TODO: rework notelist to consist of timing point lists with the different possible note types
   public List<Note> noteList;
   public Note nextNote;
 	public List<long> offsetHistory = new List<long>();
-	public int offsetCapacity = 10;
 
-	/*
-	 * player stats: how many perfect, great, good, bad hits and misses
-	 */
-	public int[] stats = new int[5];
+  /*
+    * player stats: how many perfect, great, good, bad hits and misses
+    */
+  public int[] stats = new int[5];
+  public long unstableSum = 0;
 
-	/*
+  /*
 	 * For Normal Gameplay
 	 * a t 1224
 	 * d t -382
 	 * spe  200
 	 */
-	/*
+  /*
 	 * For Visualization
 	 * a t 1094
 	 * d t -522
 	 * spe  222
 	 */
 
-	public int approachTime = 300;
+  public int approachTime = 300;
   public int despawnTime = -100;
   public float speed = 100f;
 
@@ -41,7 +42,6 @@ public class NoteManager : MonoBehaviour
 		despawnTime = -Judgement.BAD / 2;
 
 		noteList = new List<Note>();
-		offsetHistory.Capacity = offsetCapacity;
   }
 
   void Update()

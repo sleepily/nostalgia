@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     
 	void Start ()
   {
+
   }
 
 	void Update ()
@@ -20,7 +21,8 @@ public class GameManager : MonoBehaviour
 		 * @TODO: make this into a song selection menu
 		 */
 		if (Input.GetKeyDown(KeyCode.Return))
-			songManager.LoadSong("348381", "[deetz' Deception]", "ripdeetz");
+      songManager.LoadSong("514601 Camellia - Light it up", "Camellia - Light it up (Nozhomi) [Brightness]");
+    //songManager.LoadSong("348381", "[deetz' Deception]", "ripdeetz");
 		//songManager.LoadSong("158023", "UNDEAD CORPORATION - Everything will freeze (Ekoro) [Hard]", "12 - Everything will freeze");
 		//songManager.LoadSong("622946", "KOAN Sound & Asa - fuego (sakuraburst remix) (Couil) [HD]", "audio");
 

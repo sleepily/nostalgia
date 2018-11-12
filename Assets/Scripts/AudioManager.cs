@@ -39,6 +39,9 @@ public class AudioManager : MonoBehaviour
 
   public void LoadSongAudio(string path)
   {
+    if (path.EndsWith(".mp3"))
+      path = path.Substring(0, path.LastIndexOf(".mp3"));
+
     Debug.Log("Loading Song Audio: " + "Songs/" + path);
     clip = Resources.Load<AudioClip>("Songs/" + path);
 

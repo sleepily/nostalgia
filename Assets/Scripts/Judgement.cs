@@ -17,4 +17,24 @@ public class Judgement
 	public static int GREAT		= 24;
 	public static int GOOD		= 46;
 	public static int BAD			= 68;
+  public static int MISS    = 100;
+
+  public static string GetJudgementString(int judgementindex)
+  {
+    switch(judgementindex)
+    {
+      case -1:
+        return "";
+      case 0:
+        return "PERFECT";
+      case 1:
+        return "GREAT";
+      case 2:
+        return "GOOD";
+      case 3:
+        return "BAD";
+      default:
+        return "";
+    }
+  }
 }

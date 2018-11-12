@@ -39,12 +39,11 @@ public class SongManager : MonoBehaviour
 	 */
 	int indexGeneral, indexMetadata, indexDifficulty, indexTimingPoints, indexHitObjects;
 
-  public void LoadSong(string folder, string diff, string audio)
+  public void LoadSong(string folder, string diff)
   {
 		isLoaded = false;
 
 		string beatmapFolderPath = Application.dataPath + "/Resources/Songs/" + folder + "/";
-    string beatmapAudioPath = folder + "/" + audio; // without file extension. resource loader doesn't need it
     beatmapFilePath = beatmapFolderPath + diff + ".osu";
 
     LoadBeatmapIntoArray();
@@ -52,8 +51,10 @@ public class SongManager : MonoBehaviour
 
     ConvertBeatmapInfo();
 		ConvertDifficultyInfo();
-		ConvertTimingInfo();
+    ConvertTimingInfo();
 		ConvertHitObjects();
+
+    string beatmapAudioPath = folder + "/" + audioFilename; // without file extension. resource loader doesn't need it
 
     gm.audioManager.LoadSongAudio(beatmapAudioPath);
 
