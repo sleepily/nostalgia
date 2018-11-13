@@ -12,25 +12,20 @@ public class NoteManager : MonoBehaviour
     public List<Note> noteList;
     public Note nextNote;
     public List<long> offsetHistory = new List<long>();
-
-    /*
-      * player stats: how many perfect, great, good, bad hits and misses
-      */
+    
+    // player stats: how many perfect, great, good, bad hits and misses
     public int[] stats = new int[5];
     public long unstableSum = 0;
+    
+    //For Normal Gameplay
+    //a t 1224
+    //d t -382
+    //spe  200
 
-    /*
-       * For Normal Gameplay
-       * a t 1224
-       * d t -382
-       * spe  200
-       */
-    /*
-       * For Visualization
-       * a t 1094
-       * d t -522
-       * spe  222
-       */
+    //For Visualization
+    //a t 1094
+    //d t -522
+    //spe  222
 
     public int approachTime = 300;
     public int despawnTime = -100;

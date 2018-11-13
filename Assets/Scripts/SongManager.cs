@@ -10,10 +10,8 @@ public class SongManager : MonoBehaviour
     public GameManager gm;
 
     public bool isLoaded = false;
-
-    /*
-	 * @TODO: put this into a SongInfo.cs class
-	 */
+    
+	// @TODO: put this into a SongInfo.cs class
     public string beatmapFilePath;
     public string title;
     public string artist;
@@ -21,10 +19,8 @@ public class SongManager : MonoBehaviour
     public string audioFilename;
     public string audioLeadIn;
     public float beatLength;
-
-    /*
-	 * @TODO: rework this into an array representing the actual line structure
-	 */
+    
+	// @TODO: rework this into an array representing the actual line structure
     public float noteSize;
     public float noteSpeed;
     public float noteDifficulty;
@@ -32,11 +28,9 @@ public class SongManager : MonoBehaviour
     public float sliderTickRate;
 
     string[] beatmapLines;
-
-    /*
-	 * indices for skipping to certain lines
-	 * @TODO: rework this into a list/array that stores these values and make them accessible using indexarray[indexOfXY]
-	 */
+    
+	// indices for skipping to certain lines
+	// @TODO: rework this into a list/array that stores these values and make them accessible using indexarray[indexOfXY]
     int indexGeneral, indexMetadata, indexDifficulty, indexTimingPoints, indexHitObjects;
 
     public void LoadSong(string folder, string diff)
@@ -68,10 +62,7 @@ public class SongManager : MonoBehaviour
 
     void GetBeatmapFileIndices()
     {
-        /*
-         * index represents line numbers, so that when accessed in beatmapLines,
-         * the actual header line will be skipped
-         */
+        // index represents line numbers, so that when accessed in beatmapLines, the actual header line will be skipped
         int index = 0;
 
         foreach (string line in beatmapLines)
@@ -229,8 +220,7 @@ public class SongManager : MonoBehaviour
             string dataPoint = dataPoints[5];
 
             string[] sliderPoints = Regex.Split(dataPoint, "\\|");
-
-            //sliderPoints = sliderPoints.Skip(1).ToArray(); // skip letter
+            
             string sliderEndPoint = sliderPoints.Last();
 
             int sliderEndPointX = int.Parse(Regex.Split(sliderEndPoint, ":")[0]);

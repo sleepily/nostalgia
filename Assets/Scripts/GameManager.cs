@@ -12,9 +12,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        /*
-		 * @TODO: make this into a song selection menu
-		 */
+        // @TODO: make this into a song selection menu
         if (Input.GetKeyDown(KeyCode.Return))
             songManager.LoadSong("514601 Camellia - Light it up", "Camellia - Light it up (Nozhomi) [Brightness]");
         //songManager.LoadSong("348381", "[deetz' Deception]", "ripdeetz");

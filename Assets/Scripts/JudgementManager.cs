@@ -5,10 +5,8 @@ using UnityEngine;
 public class JudgementManager : MonoBehaviour
 {
     public GameManager gm;
-
-    /*
-	 * @TODO: implement long/hold note judgement
-	 */
+    
+	// @TODO: implement long/hold note judgement
     public int GetJudgement(long offset)
     {
         int judgement = CalculateJudgement(offset);
