@@ -2,78 +2,78 @@
 
 public abstract class Note : MonoBehaviour
 {
-  public GameManager gm;
+    public GameManager gm;
 
-  public long time = 1000;
-  public int x = 0;
-  public long timeUntilnote = 0;
-  public float width = 3f;
-  public float size = .5f;
-	public float speed = 200f;
+    public long time = 1000;
+    public int x = 0;
+    public long timeUntilnote = 0;
+    public float width = 3f;
+    public float size = .5f;
+    public float speed = 200f;
 
-  private Vector3 rotationPoint;
-  private Vector3 endPosition;
+    private Vector3 rotationPoint;
+    private Vector3 endPosition;
 
-  public GameObject noteModel;
+    public GameObject noteModel;
 
-	void Start ()
-  {
-    noteModel.SetActive(false);
+    void Start()
+    {
+        noteModel.SetActive(false);
 
-    noteModel.transform.localScale = new Vector3(width, size, size);
-    rotationPoint = Vector3.right * x;
-    endPosition = new Vector3(0, 0, -10);
-    endPosition += rotationPoint;
-  }
-	
-	void Update ()
-  {
-    timeUntilnote = CalculateTimeUntilNote();
-    RotateNoteModel();
+        noteModel.transform.localScale = new Vector3(width, size, size);
+        rotationPoint = Vector3.right * x;
+        endPosition = new Vector3(0, 0, -10);
+        endPosition += rotationPoint;
+    }
 
-    if (timeUntilnote < gm.noteManager.approachTime)
-      noteModel.SetActive(true);
+    void Update()
+    {
+        timeUntilnote = CalculateTimeUntilNote();
+        RotateNoteModel();
 
-    if (timeUntilnote < gm.noteManager.despawnTime)
-      MissNote();
-	}
+        if (timeUntilnote < gm.noteManager.approachTime)
+            noteModel.SetActive(true);
 
-	void MissNote()
-	{
-		gm.judgementManager.GetJudgement(gm.noteManager.despawnTime * 2);
-		RemoveNote();
-	}
+        if (timeUntilnote < gm.noteManager.despawnTime)
+            MissNote();
+    }
 
-  public void Tap(long tapTime)
-  {
-    long offset = tapTime - time;
+    void MissNote()
+    {
+        gm.judgementManager.GetJudgement(gm.noteManager.despawnTime * 2);
+        RemoveNote();
+    }
 
-		gm.ui.offsetText.text = offset.ToString();
+    public void Tap(long tapTime)
+    {
+        long offset = tapTime - time;
 
-		gm.noteManager.offsetHistory.Insert(0, offset);
+        gm.ui.offsetText.text = offset.ToString();
 
-		int judgement = gm.judgementManager.GetJudgement(offset);
+        gm.noteManager.offsetHistory.Insert(0, offset);
 
-    // if the note is hit way too early, do not remove or count as hit
-    if (judgement != -1)
-      RemoveNote();
-  }
+        int judgement = gm.judgementManager.GetJudgement(offset);
 
-  void RemoveNote()
-  {
-    gm.noteManager.noteList.RemoveAt(0);
-    Destroy(gameObject);
-  }
+        // if the note is hit way too early, do not remove or count as hit
+        if (judgement != -1)
+            RemoveNote();
+    }
 
-  void RotateNoteModel()
-  {
-    noteModel.transform.localPosition = endPosition;
-    noteModel.transform.RotateAround(Vector3.zero, Vector3.left, timeUntilnote * (-gm.noteManager.speed) / 1000);
-		noteModel.transform.rotation = Quaternion.identity;
-  }
+    void RemoveNote()
+    {
+        gm.noteManager.noteList.RemoveAt(0);
+        Destroy(gameObject);
+    }
 
-  long CalculateTimeUntilNote()
-  {
-    return time - gm.audioManager.position;
-  }
+    void RotateNoteModel()
+    {
+        noteModel.transform.localPosition = endPosition;
+        noteModel.transform.RotateAround(Vector3.zero, Vector3.left, timeUntilnote * (-gm.noteManager.speed) / 1000);
+        noteModel.transform.rotation = Quaternion.identity;
+    }
+
+    long CalculateTimeUntilNote()
+    {
+        return time - gm.audioManager.position;
+    }
 }

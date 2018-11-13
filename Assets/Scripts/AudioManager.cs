@@ -4,48 +4,43 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-	public long position = 0;
-	public long positionWithoutOffset = 0;
-	public AudioClip clip;
-	public AudioSource source;
+    public long position = 0;
+    public long positionWithoutOffset = 0;
+    public AudioClip clip;
+    public AudioSource source;
 
-	public float beatLength = 0f;
+    public float beatLength = 0f;
 
-	public long offset = 0;
+    public long offset = 0;
 
-	void Start()
-	{
+    void Update()
+    {
+        if (source.isPlaying)
+            positionWithoutOffset = (long)(source.time * 1000);
 
-	}
+        position = positionWithoutOffset + offset;
+    }
 
-	void Update()
-	{
-		if (source.isPlaying)
-			positionWithoutOffset = (long)(source.time * 1000);
+    public void Play()
+    {
+        if (source.isPlaying)
+            return;
 
-		position = positionWithoutOffset + offset;
-	}
+        if (source.clip.loadState != AudioDataLoadState.Loaded)
+            return;
 
-  public void Play()
-  {
-    if (source.isPlaying)
-      return;
+        source.Play();
+    }
 
-    if (source.clip.loadState != AudioDataLoadState.Loaded)
-      return;
+    public void LoadSongAudio(string path)
+    {
+        if (path.EndsWith(".mp3"))
+            path = path.Substring(0, path.LastIndexOf(".mp3"));
 
-    source.Play();
-  }
+        Debug.Log("Loading Song Audio: " + "Songs/" + path);
+        clip = Resources.Load<AudioClip>("Songs/" + path);
 
-  public void LoadSongAudio(string path)
-  {
-    if (path.EndsWith(".mp3"))
-      path = path.Substring(0, path.LastIndexOf(".mp3"));
-
-    Debug.Log("Loading Song Audio: " + "Songs/" + path);
-    clip = Resources.Load<AudioClip>("Songs/" + path);
-
-    source.clip = clip;
-    source.clip.LoadAudioData();
-  }
+        source.clip = clip;
+        source.clip.LoadAudioData();
+    }
 }

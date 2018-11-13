@@ -4,68 +4,58 @@ using UnityEngine;
 
 public class JudgementManager : MonoBehaviour
 {
-	public GameManager gm;
-	
-	void Start ()
-	{
-		
-	}
-	
-	void Update ()
-	{
-		
-	}
+    public GameManager gm;
 
-	/*
+    /*
 	 * @TODO: implement long/hold note judgement
 	 */
-	public int GetJudgement(long offset)
-	{
-		int judgement = CalculateJudgement(offset);
-
-    DisplayJudgement(judgement);
-    RenderStats();
-
-    return judgement;
-	}
-
-  void DisplayJudgement(int judgementIndex)
-  {
-    string judgementString = Judgement.GetJudgementString(judgementIndex);
-
-    if (judgementString != "")
+    public int GetJudgement(long offset)
     {
-      gm.ui.judgementText.text = judgementString;
-      gm.noteManager.stats[judgementIndex] += 1;
+        int judgement = CalculateJudgement(offset);
+
+        DisplayJudgement(judgement);
+        RenderStats();
+
+        return judgement;
     }
-  }
 
-  void RenderStats()
-  {
-    string statsString = "";
+    void DisplayJudgement(int judgementIndex)
+    {
+        string judgementString = Judgement.GetJudgementString(judgementIndex);
 
-    foreach (int i in gm.noteManager.stats)
-      statsString += i + " ";
+        if (judgementString != "")
+        {
+            gm.ui.judgementText.text = judgementString;
+            gm.noteManager.stats[judgementIndex] += 1;
+        }
+    }
 
-    gm.ui.statsText.text = statsString;
-  }
+    void RenderStats()
+    {
+        string statsString = "";
 
-	int CalculateJudgement(long offset)
-	{
-    if (offset <= Judgement.MISS / 2)
-      return -1;
+        foreach (int i in gm.noteManager.stats)
+            statsString += i + " ";
 
-		float abs = Mathf.Abs(offset);
+        gm.ui.statsText.text = statsString;
+    }
 
-		if (abs <= Judgement.PERFECT / 2)
-			return 0;
-		if (abs <= Judgement.GREAT / 2)
-			return 1;
-		if (abs <= Judgement.GOOD / 2)
-			return 2;
-		if (abs <= Judgement.BAD / 2)
-			return 3;
+    int CalculateJudgement(long offset)
+    {
+        if (offset <= Judgement.MISS / 2)
+            return -1;
 
-		return 4;
-	}
+        float abs = Mathf.Abs(offset);
+
+        if (abs <= Judgement.PERFECT / 2)
+            return 0;
+        if (abs <= Judgement.GREAT / 2)
+            return 1;
+        if (abs <= Judgement.GOOD / 2)
+            return 2;
+        if (abs <= Judgement.BAD / 2)
+            return 3;
+
+        return 4;
+    }
 }

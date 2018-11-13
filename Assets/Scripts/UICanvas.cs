@@ -9,14 +9,4 @@ public class UICanvas : MonoBehaviour
 	public Text urText;
 	public Text judgementText;
 	public Text statsText;
-
-	void Start ()
-	{
-		
-	}
-	
-	void Update ()
-	{
-		
-	}
 }

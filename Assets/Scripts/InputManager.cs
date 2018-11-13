@@ -4,25 +4,20 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-  public GameManager gm;
-  
-	void Start ()
-  {
-		
-	}
-	
-	void Update ()
-  {
-    if (!gm.audioManager.source.isPlaying)
-      return;
+    public GameManager gm;
 
-    if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.C))
-      Tap();
-	}
+    void Update()
+    {
+        if (!gm.audioManager.source.isPlaying)
+            return;
 
-  void Tap()
-  {
-    Note n = gm.noteManager.noteList[0];
-    n.Tap(gm.audioManager.position);
-  }
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.C))
+            Tap();
+    }
+
+    void Tap()
+    {
+        Note n = gm.noteManager.noteList[0];
+        n.Tap(gm.audioManager.position);
+    }
 }
